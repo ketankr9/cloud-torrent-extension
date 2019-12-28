@@ -1,12 +1,12 @@
 {
 
   "manifest_version": 2,
-  "name": "Magnet",
-  "description": "Send Magnet to Server",
-  "version": "1.0",
+  "name": "Cloud-Torrent-Magnet",
+  "description": "Send Magnet to Cloud-Torrent Server",
+  "version": "1.2b",
   "applications": {
     "gecko": {
-      "strict_min_version": "56.0a1"
+      "strict_min_version": "57.0"
     }
   },
 
@@ -14,9 +14,14 @@
     "scripts": ["background.js"]
   },
 
+  "options_ui": {
+    "page": "options.html"
+  },
+
   "permissions": [
     "menus",
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
 
   "icons": {
