@@ -8,8 +8,8 @@ function onCreated() {
 
 browser.menus.create({
   id: "add-magnet",
-  title: "Add torrent",
-  contexts: ["all"]
+  title: "Add Torrent",
+  contexts: ["link"]
 }, onCreated);
 
 function sendMagnet(magnetContent, serverip){
