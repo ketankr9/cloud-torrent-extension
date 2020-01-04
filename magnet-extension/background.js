@@ -18,6 +18,9 @@ function sendMagnet(magnetContent, serverip){
 
   xhr.open("POST", 'http://'+serverip+'/api/magnet', true);
 
+  //Include browser based Cookie header and Authorization header(if set)
+  xhr.withCredentials = true;
+
   //Send the proper header information along with the request
   xhr.setRequestHeader("Content-type", "text/plain");
 

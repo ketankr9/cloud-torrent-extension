@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "name": "Cloud-Torrent-Magnet",
   "description": "Send Magnet to Cloud-Torrent Server",
-  "version": "1.2b",
+  "version": "1.3b",
   "applications": {
     "gecko": {
       "strict_min_version": "57.0"
