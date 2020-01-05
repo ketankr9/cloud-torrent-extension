@@ -12,10 +12,9 @@ browser.menus.create({
   contexts: ["link"]
 }, onCreated);
 
-function sendMagnet(magnetContent, serverip){
-  // Send download request to the background for the format selected
-  var xhr = new XMLHttpRequest();
+function MakeXhrRequest(magnetContent, serverip){
 
+  var xhr = new XMLHttpRequest();
   xhr.open("POST", 'http://'+serverip+'/api/magnet', true);
 
   //Include browser based Cookie header and Authorization header(if set)
@@ -25,29 +24,39 @@ function sendMagnet(magnetContent, serverip){
   xhr.setRequestHeader("Content-type", "text/plain");
 
   xhr.onreadystatechange = function() {
-  //Call a function when the state changes.
   if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-  // Request finished. Do processing here.
+  // Request finished. Do processing here. Maybe send notification to the user via browser
     console.log("XHR SUCCESS");
     }
   }
   xhr.send(magnetContent);
 }
 
-browser.menus.onClicked.addListener((info, tab) => {
-  console.log("Item " + info.menuItemId + " clicked " +
-              "in tab " + tab.id);
-  console.log(info.linkUrl);
-
-  function setCurrentChoice(result) {
-    sendMagnet(info.linkUrl, result.server.ip);
-  }
-
-  function onError(error) {
+function sendMagnet(magnet){
+  browser.storage.sync.get("server").then( result => {
+    MakeXhrRequest(magnet, result.server.ip);
+  }, error => {
     console.log(`Error: ${error}`);
-  }
+  });
+}
 
-  browser.storage.sync.get("server").then(setCurrentChoice, onError);
-  // sendMagnet(info.linkUrl);
-
+browser.menus.onClicked.addListener((info, tab) => {
+  // console.log("Item " + info.menuItemId + " clicked " +
+  //             "in tab " + tab.id);
+  // console.log(info.linkUrl);
+  sendMagnet(info.linkUrl);
 });
+
+// http://ctorrent.torrent/addtorrent/* handler
+function handleTorrentUrl(requestDetails) {
+  const magnetUri = decodeURIComponent(requestDetails.url.slice("http://ctorrent.torrent/addtorrent/".length,));
+  // console.log("Loading: " + magnetUri);
+  sendMagnet(magnetUri);
+  return {cancel: true}
+}
+
+browser.webRequest.onBeforeRequest.addListener(
+  handleTorrentUrl,
+  {urls: ["http://ctorrent.torrent/addtorrent/*"]},
+  ['blocking']
+);

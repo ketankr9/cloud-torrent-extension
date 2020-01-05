@@ -3,7 +3,7 @@
   "manifest_version": 2,
   "name": "Cloud-Torrent-Magnet",
   "description": "Send Magnet to Cloud-Torrent Server",
-  "version": "1.4b",
+  "version": "1.5b",
   "applications": {
     "gecko": {
       "strict_min_version": "57.0"
@@ -21,13 +21,23 @@
   "permissions": [
     "menus",
     "activeTab",
-    "storage"
+    "storage",
+    "webRequest",
+    "webRequestBlocking",
+     "http://ctorrent.torrent/*"
   ],
 
   "icons": {
     "16": "icons/page-16.png",
     "32": "icons/page-32.png",
     "48": "icons/page-48.png"
-  }
+  },
 
+  "protocol_handlers": [
+    {
+      "protocol": "magnet",
+      "name": "Cloud-Torrent-Magnet",
+      "uriTemplate": "http://ctorrent.torrent/addtorrent/%s"
+    }
+  ]
 }
