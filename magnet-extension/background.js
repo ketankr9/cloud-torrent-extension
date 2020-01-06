@@ -15,7 +15,15 @@ browser.menus.create({
 function MakeXhrRequest(magnetContent, serverip){
 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", 'http://'+serverip+'/api/magnet', true);
+
+  var URL = 'http://'+serverip + '/api/';
+
+  if(magnetContent.slice(0,6) === 'magnet')
+    URL += 'magnet';
+  else
+    URL += 'url';
+
+  xhr.open("POST", URL, true);
 
   //Include browser based Cookie header and Authorization header(if set)
   xhr.withCredentials = true;

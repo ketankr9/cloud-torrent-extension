@@ -6,6 +6,9 @@ When users click right on a magnet link, there will be an option in the browser'
 ![setting](setting_page.png)  
 
 ### Releases  
+**version: 1.6b**  
+* Now url links can also be added as magnet, solving [Issue#2](https://github.com/ketankr9/cloud-torrent-extension/issues/2)  
+
 **version: 1.5b**
 * Click on a magnet and it will be sent to the cloud torrent. Used protocol_handlers for handling magnets.  
 
