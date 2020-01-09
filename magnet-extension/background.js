@@ -12,21 +12,15 @@ browser.menus.create({
   contexts: ["link"]
 }, onCreated);
 
-function MakeXhrRequest(magnetContent, serverip){
+function MakeXhrRequest(magnetContent, url){
 
   var xhr = new XMLHttpRequest();
 
-  var URL = 'http://'+serverip + '/api/';
-
-  if(magnetContent.slice(0,6) === 'magnet')
-    URL += 'magnet';
-  else
-    URL += 'url';
-
-  xhr.open("POST", URL, true);
+  xhr.open("POST", url, true);
 
   //Include browser based Cookie header and Authorization header(if set)
-  xhr.withCredentials = true;
+  // xhr.withCredentials = true;
+  xhr.setRequestHeader('Authorization', 'Basic ' + btoa('test' + ':' + 'test123'));
 
   //Send the proper header information along with the request
   xhr.setRequestHeader("Content-type", "text/plain");
@@ -40,9 +34,35 @@ function MakeXhrRequest(magnetContent, serverip){
   xhr.send(magnetContent);
 }
 
+// function MakeXhrRequest(magnetContent, url){
+//     var clientId = "test";
+//     var clientSecret = "test123";
+//     var authorizationBasic = window.btoa(clientId + ':' + clientSecret);
+//
+//     var request = new XMLHttpRequest();
+//     request.open('POST', url, true);
+//     request.setRequestHeader("Content-type", "text/plain");
+//     request.setRequestHeader('Authorization', 'Basic ' + authorizationBasic);
+//
+//     request.send(magnetContent);
+//
+//     request.onreadystatechange = function () {
+//         if (request.readyState === 4) {
+//            console.log(request.responseText);
+//        }else{
+//            console.log("readystate", request.readyState);
+//        }
+//     };
+// }
+
 function sendMagnet(magnet){
   browser.storage.sync.get("server").then( result => {
-    MakeXhrRequest(magnet, result.server.ip);
+      var url = 'http://'+result.server.ip + '/api/';
+      if(magnet.slice(0,6) === 'magnet')
+        url += 'magnet';
+      else
+        url += 'url';
+    MakeXhrRequest(magnet, url);
   }, error => {
     console.log(`Error: ${error}`);
   });

@@ -6,7 +6,8 @@
   "version": "1.6b",
   "applications": {
     "gecko": {
-      "strict_min_version": "57.0"
+      "strict_min_version": "57.0",
+      "id": "ketankr9@gmail.com"
     }
   },
 
