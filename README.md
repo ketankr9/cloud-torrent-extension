@@ -4,8 +4,11 @@ A mozilla browser extension to directly add magnet links to [Cloud-Torrent](http
 
 When users click right on a magnet link, there will be an option in the browser's context menu and clicking on it will send magnet link to Cloud Torrent which is specified in the setting.  
 ![setting](setting_page.png)  
-
+![Notification](screenshot_notification2.png)
 ### Releases  
+**version: 1.7b**  
+*	Get Browser Notification whenever a magnet link is successfully added to the remote torrent server. To use this notification feature use the latest patched version [from here](https://github.com/ketankr9/simple-torrent) or wait for it to be committed in the central repository.    
+
 **version: 1.6b**  
 * Now url links can also be added as magnet, solving [Issue#2](https://github.com/ketankr9/cloud-torrent-extension/issues/2)  
 
@@ -20,4 +23,4 @@ When users click right on a magnet link, there will be an option in the browser'
 * Enabled Basic Authorization support. Now every Add-Magnet request includes torrent-server based cookie header and authorization header(if auth is enabled).  
 
 ### Future Goals  
-* Enable a feedback mechanism like browser notification when a magnet has been sent to the server.  
+* **Done** Enable a feedback mechanism like browser notification when a magnet has been sent to the server.  

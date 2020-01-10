@@ -2,7 +2,7 @@ function onCreated() {
   if (browser.runtime.lastError) {
     console.log(`Error: ${browser.runtime.lastError}`);
   } else {
-    console.log("Item created successfully");
+    console.log("(Add Torrent) Context-Menu created successfully");
   }
 }
 
@@ -12,6 +12,22 @@ browser.menus.create({
   contexts: ["link"]
 }, onCreated);
 
+function PushNotification(title, message){
+  browser.notifications.create("Cloud-Torrent-Magnet", {
+  "type": "basic",
+  "iconUrl": browser.runtime.getURL("icons/page-48.png"),
+  "title": title,
+  "message": message
+  });
+}
+
+function GetTorrentName(magnetContent){
+  if(magnetContent.slice(0,6) !== 'magnet')
+    return magnetContent;
+  const _url = new URL(magnetContent);
+  return _url.searchParams.get("dn");
+}
+
 function MakeXhrRequest(magnetContent, url){
 
   var xhr = new XMLHttpRequest();
@@ -19,41 +35,23 @@ function MakeXhrRequest(magnetContent, url){
   xhr.open("POST", url, true);
 
   //Include browser based Cookie header and Authorization header(if set)
-  // xhr.withCredentials = true;
-  xhr.setRequestHeader('Authorization', 'Basic ' + btoa('test' + ':' + 'test123'));
+  xhr.withCredentials = true;
 
   //Send the proper header information along with the request
   xhr.setRequestHeader("Content-type", "text/plain");
 
+  torrentName = GetTorrentName(magnetContent);
   xhr.onreadystatechange = function() {
-  if(xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-  // Request finished. Do processing here. Maybe send notification to the user via browser
-    console.log("XHR SUCCESS");
+    if(xhr.readyState == XMLHttpRequest.DONE){
+      if(xhr.status == 200)
+        PushNotification("Torrent Added", torrentName);
+      // else
+      //   PushNotification("Failed!!!", torrentName);
     }
   }
+  
   xhr.send(magnetContent);
 }
-
-// function MakeXhrRequest(magnetContent, url){
-//     var clientId = "test";
-//     var clientSecret = "test123";
-//     var authorizationBasic = window.btoa(clientId + ':' + clientSecret);
-//
-//     var request = new XMLHttpRequest();
-//     request.open('POST', url, true);
-//     request.setRequestHeader("Content-type", "text/plain");
-//     request.setRequestHeader('Authorization', 'Basic ' + authorizationBasic);
-//
-//     request.send(magnetContent);
-//
-//     request.onreadystatechange = function () {
-//         if (request.readyState === 4) {
-//            console.log(request.responseText);
-//        }else{
-//            console.log("readystate", request.readyState);
-//        }
-//     };
-// }
 
 function sendMagnet(magnet){
   browser.storage.sync.get("server").then( result => {
@@ -69,16 +67,12 @@ function sendMagnet(magnet){
 }
 
 browser.menus.onClicked.addListener((info, tab) => {
-  // console.log("Item " + info.menuItemId + " clicked " +
-  //             "in tab " + tab.id);
-  // console.log(info.linkUrl);
   sendMagnet(info.linkUrl);
 });
 
 // http://ctorrent.torrent/addtorrent/* handler
 function handleTorrentUrl(requestDetails) {
   const magnetUri = decodeURIComponent(requestDetails.url.slice("http://ctorrent.torrent/addtorrent/".length,));
-  // console.log("Loading: " + magnetUri);
   sendMagnet(magnetUri);
   return {cancel: true}
 }

@@ -3,11 +3,10 @@
   "manifest_version": 2,
   "name": "Cloud-Torrent-Magnet",
   "description": "Send Magnet to Cloud-Torrent Server",
-  "version": "1.6b",
+  "version": "1.7b",
   "applications": {
     "gecko": {
-      "strict_min_version": "57.0",
-      "id": "ketankr9@gmail.com"
+      "strict_min_version": "57.0"
     }
   },
 
@@ -24,6 +23,7 @@
     "activeTab",
     "storage",
     "webRequest",
+    "notifications",
     "webRequestBlocking",
      "http://ctorrent.torrent/*"
   ],
